@@ -21,8 +21,8 @@ async function main() {
     // }    
 
     // await createVestingSchedule("0x4A4E870F13f3F3568B2A1f392BC2735a25947E8F",1730977243,1,0,"1000000");
-//   /  const res1 = await create("0x4A4E870F13f3F3568B2A1f392BC2735a25947E8F", 100, "https://hello/world/1.json", "0xaaaa");
-    const res = await totalsupply(1);
+     //  const res1 = await create("0x4A4E870F13f3F3568B2A1f392BC2735a25947E8F", 35, "https://hello/world/1.json", "0xaaaa");
+    const res = await totalsupply(4);
 }
 
 main().then(()=>process.exit(0)).catch((e)=>{console.log(e);process.exit(1);});

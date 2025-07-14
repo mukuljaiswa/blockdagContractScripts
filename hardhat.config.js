@@ -28,9 +28,6 @@ module.exports = {
       accounts: [`${PRIVATE_KEY}`]
     }
   },
-  etherscan: {
-    apiKey: "Y6PMZSW9N93SV5ZHMTMXXX4FJRAVMEZ7KC"
-  },
   sourcify: {
     enabled: true
   },
