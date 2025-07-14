@@ -6,9 +6,12 @@ const FormData = require("form-data");
 const SOLIDITY_INPUT_PATH = "solidity-standard-json-input.json";
 
 // ✅ Contract details
-const CONTRACT_ADDRESS = "0x9376bF4cd3d36795CB1EF7f91aaACb9D062Ca436";
+const CONTRACT_ADDRESS = process.argv[2];
 const COMPILER_VERSION = "v0.8.24+commit.e11b9ed9";
 const CODE_FORMAT = "solidity-standard-json-input";
+
+console.log("Contract Address in the verify_constract.js file:", CONTRACT_ADDRESS);
+
 
 // ✅ API endpoints
 const CSRF_TOKEN_URL = "https://api-explorer.devdomain123.com/v1/api/csrf-token";

@@ -12,7 +12,7 @@ contract MyToken is Initializable, ERC1155Upgradeable, AccessControlUpgradeable,
     string private symbol;
     uint256 private next_id;
     string private base_uri;
-    uint public t11;
+    uint public tr;
     mapping(uint256 => string ) private token_uri;
 
     //constructor() {
