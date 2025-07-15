@@ -1,34 +1,50 @@
+require("dotenv").config();
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-verify");
 require("@nomicfoundation/hardhat-ethers");
-require('@openzeppelin/hardhat-upgrades');
+require("@openzeppelin/hardhat-upgrades");
 
-/** @type import('hardhat/config').HardhatUserConfig */
-// const ALCHEMY_API_KEY = "Japd4jMfawgqY0HuVrZlKNlAMCDEplKW";
-const PRIVATE_KEY = "e4843ef6113472221280f583526b6815df317cbe1ad7a03b32f60233aab96759";
+const fs = require('fs');
+const path = require('path');
+
+const fetchCompilerVersion = require("./version"); // adjust path as needed
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const solidityVersion = process.env.VERSION;
+
+const filePath = path.join(__dirname, "fullsolidityVersion.json");
+
+// Call fetch and save to file (non-blocking)
+fetchCompilerVersion(solidityVersion).then((fullVersion) => {
+  console.log(`✅ Full Solidity Version for ${solidityVersion}: ${fullVersion}`);
+
+  const jsonContent = JSON.stringify({ fullVersion }, null, 2);
+
+  // Write or overwrite file
+  fs.writeFileSync(filePath, jsonContent, 'utf-8');
+  console.log("📁 fullsolidityVersion.json created/updated successfully.");
+}).catch((err) => {
+  console.warn("⚠️ Could not fetch full Solidity version:", err.message);
+});
 
 module.exports = {
   solidity: {
-    version: "0.8.24",
+    version: solidityVersion,
     settings: {
-      evmVersion: "london", // You can change to istanbul, berlin, paris, etc. as needed
+      evmVersion: process.env.EVM_VERSION,
       optimizer: {
         enabled: true,
         runs: 200,
-      }
-    }
+      },
+    },
   },
   networks: {
-    holesky: {
-      url: `https://eth-holesky.public.blastapi.io`,
-      accounts: [`${PRIVATE_KEY}`]
-    },
     blockdag: {
-      url: `http://34.212.58.112:18545`,
-      accounts: [`${PRIVATE_KEY}`]
-    }
+      url: process.env.RPC_URL,
+      accounts: [`${PRIVATE_KEY}`],
+    },
   },
   sourcify: {
-    enabled: true
+    enabled: true,
   },
 };

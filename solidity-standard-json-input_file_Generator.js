@@ -68,7 +68,6 @@ function processBuildInfo() {
 
     // Write to new file (will overwrite if exists)
     fs.writeFileSync(outputFilePath, JSON.stringify(parsedInput, null, 2), 'utf8');
-    console.log(`✅ Successfully ${fs.existsSync(outputFilePath) ? 'overwrote' : 'saved'} file: ${outputFilePath}`);
     
   } catch (err) {
     console.error(`❌ Error: ${err.message}`);
