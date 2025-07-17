@@ -6,9 +6,9 @@ const path = require("path");
 const { ethers, upgrades } = require('hardhat');
 
 async function main() {
+  console.log('Deploying Smart Contract...');
   const { ethers, upgrades } = require('hardhat');
   const erc1155Fact = await ethers.getContractFactory("MyToken");
-  console.log('Deploying Smart Contract...');
   const owner = process.env.OWNER_ADDRESS;
   const name = "Just for fun";
   const symbol = "Fun";

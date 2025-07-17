@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run deployment script and see all console logs
-npx hardhat run --network blockdag ignition/modules/deploy.js
+npx hardhat run --network blockdag ignition/modules/deploy3.js
 
 # Read the implementation address from file
 implAddress=$(cat ignition/modules/impl_address.txt)
