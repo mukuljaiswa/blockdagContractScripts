@@ -6,18 +6,18 @@ const { ethers } = require("hardhat");
 async function main() {
   console.log("Deploying SimpleNFT...");
 
-  const nftFactory = await ethers.getContractFactory("MyToken");
+  const Contract_path=process.env.CONTRACT_PATH ;
+
+  const nftFactory = await ethers.getContractFactory(Contract_path);
 
   const contract = await nftFactory.deploy({
-    gasLimit: process.env.GAS_LIMIT || 30000000,
+    gasLimit: process.env.GAS_LIMIT ,
   });
 
   await contract.waitForDeployment(); // Optional: wait for confirmation
 
   const contractAddress = await contract.getAddress();
   console.log("✅ SimpleNFT deployed to:", contractAddress);
-
-
 
   // Save contract address to file
   fs.writeFileSync(path.join(__dirname, "impl_address.txt"), contractAddress.trim());

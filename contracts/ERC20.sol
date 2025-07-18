@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract SimpleNFT is ERC721URIStorage, Ownable {
     uint256 private _tokenIds;
     uint public tq1;
+    uint public rrtt;
 
 
     constructor() ERC721("SimpleNFT", "SNFT") Ownable(msg.sender) {}

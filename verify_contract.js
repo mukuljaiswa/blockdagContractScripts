@@ -61,6 +61,7 @@ async function verifyContract() {
   } catch (err) {
     console.error("❌ Error during verification:");
     console.error(err.message || err);
+    //console.error("response.data....",response.data);
   }
 }
 
