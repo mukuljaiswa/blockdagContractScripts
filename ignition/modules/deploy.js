@@ -1,41 +1,47 @@
 require("dotenv").config();
-
 const fs = require("fs");
 const path = require("path");
-
-const { ethers, upgrades } = require('hardhat');
+const { ethers } = require("hardhat");
 
 async function main() {
   const contractPath = process.env.CONTRACT_PATH;
-  console.log('Deploying Smart Contract...');
-  const { ethers, upgrades } = require('hardhat');
-  const erc1155Fact = await ethers.getContractFactory(contractPath);
-  const owner = process.env.OWNER_ADDRESS;
-  const name = "Just for fun";
-  const symbol = "Fun";
-  
-  const erc1155 = await upgrades.deployProxy(
-    erc1155Fact,
-    [owner, owner, name, symbol],
-    {
-      initializer: "initialize",
-      gasLimit: process.env.GAS_LIMIT , // Use the gas limit from .env or default to 30 million
-      kind: "transparent"
-    }
+  const gasLimit = process.env.GAS_LIMIT 
+  const rawArgs = process.env.CONSTRUCTOR_ARGS || "[]";
+
+  if (!contractPath) {
+    throw new Error("❌ CONTRACT_PATH is not defined in .env");
+    
+  }
+
+  let constructorArgs;
+  try {
+    constructorArgs = JSON.parse(rawArgs);
+    if (!Array.isArray(constructorArgs)) throw new Error();
+  } catch (err) {
+    throw new Error("❌ Invalid CONSTRUCTOR_ARGS. Must be a valid JSON array.");
+  }
+
+  console.log(`📦 Deploying contract from: ${contractPath}`);
+  console.log(`🧾 Constructor args:`, constructorArgs);
+
+  const contractFactory = await ethers.getContractFactory(contractPath);
+  const contract = await contractFactory.deploy(...constructorArgs, {
+    gasLimit: gasLimit,
+  });
+
+  await contract.waitForDeployment();
+  const contractAddress = await contract.getAddress();
+
+  console.log(`✅ Contract deployed at: ${contractAddress}`);
+
+  // Save address to file
+  fs.writeFileSync(
+    path.join(__dirname, "impl_address.txt"),
+    contractAddress.trim()
   );
-
-
-  console.log("Contract deployed to:", erc1155.target);
-
-  await new Promise(resolve => setTimeout(resolve, 5000));
-
-  const proxyAddress = erc1155.target;
-  const implAddress = await upgrades.erc1967.getImplementationAddress(proxyAddress);
-
-  console.log('Implementation address:',implAddress);
-
-  // ✅ Write it to a file
-  fs.writeFileSync(path.join(__dirname, "impl_address.txt"), implAddress.trim());
 }
 
-main();
+main().catch((error) => {
+  console.error("❌ Deployment failed:", error);
+  process.exit(1);
+});
