@@ -1,3 +1,4 @@
+require("dotenv").config();
 const fs = require("fs");
 const axios = require("axios");
 const FormData = require("form-data");
@@ -12,11 +13,26 @@ const SOLIDITY_VERSION_PATH = "fullsolidityVersion.json";
 const CONTRACT_ADDRESS = process.argv[2];
 const CODE_FORMAT = "solidity-standard-json-input";
 
-// ✅ API endpoints
-const CSRF_TOKEN_URL = "https://api-explorer.devdomain123.com/v1/api/csrf-token";
-const VERIFY_CONTRACT_URL = "https://api-explorer.devdomain123.com/v1/api/contract/verifyContract";
+// ✅ Environment selection from .env
+
+const ENV = process.env.ENVIRONMENT?.toUpperCase() ;
+
+
+// ✅ API endpoint configuration
+let CSRF_TOKEN_URL, VERIFY_CONTRACT_URL;
+
+if (ENV === "STAGE") {
+  CSRF_TOKEN_URL = "https://api-explorer.devdomain123.com/v1/api/csrf-token";
+  VERIFY_CONTRACT_URL = "https://api-explorer.devdomain123.com/v1/api/contract/verifyContract";
+} else if (ENV === "PRIMORDIAL") {
+  CSRF_TOKEN_URL = "https://api.primordial.bdagscan.com/v1/api/csrf-token";
+  VERIFY_CONTRACT_URL = "https://api.primordial.bdagscan.com/v1/api/contract/verifyContract";
+} else {
+  throw new Error("❌ Invalid ENVIRONMENT in .env file. Must be STAGE or PRIMORDIAL");
+}
 
 console.log("Verify for the contract address:", CONTRACT_ADDRESS);
+console.log("Selected environment:", ENV);
 
 async function verifyContract() {
   try {

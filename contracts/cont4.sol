@@ -11,6 +11,7 @@ contract BridgeContract {
     address public admin;
     IToken public tokenA;
     IToken public tokenB;
+    
 
     constructor(address _tokenA, address _tokenB) {
         admin = msg.sender;
